@@ -50,7 +50,7 @@ class CI_Model_Base {
 		return $CI->$key;
 	}
 }
-// END Model Class
+// END CI_Model Class
 
-/* End of file Model.php */
-/* Location: ./system/core/Model.php */
+/* End of file CI_Model.php */
+/* Location: ./system/core/CI_Model.php */

@@ -1,7 +1,7 @@
 <?  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * Custom Model_Field Class
+ * Custom Field Class
  *
  * @package		CodeIgniter
  * @subpackage	Libraries
@@ -24,7 +24,7 @@ define('FORM_EMAIL','email');
 define('FORM_URL','url');
 define('FORM_FILE','file');
  
-class Model_Field {
+class Field {
 	public $name = '';
 	private $type = '';
 	private $size = '';
@@ -91,11 +91,11 @@ class Model_Field {
 				$str .= "<textarea name=\"$this->name\" type=\"$this->input\" class=\"$class $required\" $this->attrs >".htmlentities($value,ENT_QUOTES)."</textarea><br />\n";
 				break;
 			case FORM_HTML:
-				$str .= "<textarea name=\"$this->name\" type=\"$this->input\" class=\"mceCoder $required\" $this->attrs >".nl2br(mysql_escape_string($value))."</textarea>\n";
+				$str .= "<textarea name=\"$this->name\" type=\"$this->input\" class=\"mceCoder $required\" $this->attrs >".nl2br(mysql_real_escape_string($value))."</textarea>\n";
 				break;
 			case FORM_SELECT:
 				$str .= "
-				<select name=\"$this->name\" type=\"$this->input\" value=\"$value\" class=\"$required ajaxSelect\" $this->attrs selected=\"$this->value\">
+				<select name=\"$this->name\" type=\"$this->input\" value=\"".form_prep($value)."\" class=\"$required ajaxSelect\" $this->attrs selected=\"$this->value\">
 					<option>Select An Option</option>
 				</select>\n";
 				break;
@@ -104,24 +104,25 @@ class Model_Field {
 				if($value == 'CURRENT_TIMESTAMP' || $value == '')
 					$value = date("Y-m-d");
 				*/
-				$str .= "<input name=\"$this->name\" type=\"$this->input\" value=\"$value\" maxlength=\"$this->size\" class=\"$required datefield\" $this->attrs />\n";			
+				$str .= "<input name=\"$this->name\" type=\"$this->input\" value=\"".form_prep($value)."\" maxlength=\"$this->size\" class=\"$required datefield\" $this->attrs />\n";			
 				break;
 			case FORM_HIDDEN:
-				$str .= "<input name=\"$this->name\" type=\"$this->input\" value=\"$value\" class=\"$required\" $this->attrs />\n";			
+				$str .= "<input name=\"$this->name\" type=\"$this->input\" value=\"".form_prep($value)."\" class=\"$required\" $this->attrs />\n";			
 				break;
 			case FORM_FILE:
 				$str .= "<input name=\"$this->name\" type=\"$this->input\" maxlength=\"$this->size\" class=\"$required\" $this->attrs />\n";			
 				break;
 			default:
-				$str .= "<input name=\"$this->name\" type=\"$this->input\" value=\"$value\" maxlength=\"$this->size\" class=\"$required\" $this->attrs />\n";
-				//$str .= "<textarea name=\"$this->name\" type=\"$this->input\" value=\"$value\" class=\"mceSuperLight $required\">$value</textarea>\n";
+				$str .= "<input name=\"$this->name\" type=\"$this->input\" value=\"".form_prep($value)."\" maxlength=\"$this->size\" class=\"$required\" $this->attrs />\n";
+				//$str .= "<textarea name=\"$this->name\" type=\"$this->input\" value=\"".form_prep($value)."\" class=\"mceSuperLight $required\">$value</textarea>\n";
 		}
 			
-		$this->input = $str;
+		$this->input = "<div>$str</div>";
 		return $this->input;
 	}
 	
 	public function __toString() {
+		die("toString called");
 		return (string)$this->value;
 	}
 }
@@ -135,3 +136,7 @@ function getTimestamp() {
 	//return date("Y-m-d h:m:s");
 	return time();
 }
+// END Field Class
+
+/* End of file Field.php */
+/* Location: ./system/core/Field.php */

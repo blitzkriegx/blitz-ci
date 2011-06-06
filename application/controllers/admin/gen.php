@@ -29,119 +29,119 @@ foreach($tables as $table_name)
 	while($column = mysql_fetch_array($q))
 	{
 		list($field,$type,$null,$key,$default,$extra) = $column;
-
-        if(strpos($type,"(") !== false) {
-		    list($type,$size,$unsigned) =  preg_split("/[()]+/",$type); // In the event type contains a size, i.e. smallint(5), break apart to make usable
-		    $unsigned = trim($unsigned);
-            //die("$type,$size,$unsigned");
-        }
-		/*		
-		$validation[] = "trim";
-		$validation[] = "required";
-		$validation[] = "min_length[1]";
-		if($size)
-			$validation[] = "min_length[$size]";
-		$validation[] = "xss_clean";
-		$validation[] = "regex_match[/^$/]";
-		$validation[] = "matches[other_field_name]";
-		$validation[] = "exact_length[size]";
-		$validation[] = "greater_than[min]";
-		$validation[] = "less_than[max]";
-		$validation[] = "alpha";
-		$validation[] = "alpha_numeric";
-		$validation[] = "alpha_dash";
-		$validation[] = "numeric";
-		$validation[] = "is_numeric";		
-		$validation[] = "integer";
-		$validation[] = "decimal";
-		$validation[] = "is_natural";
-		$validation[] = "is_natural_no_zero";
-		$validation[] = "valid_phone";
-		$validation[] = "valid_email";
-		$validation[] = "valid_emails";
-		$validation[] = "valid_ip";
-		$validation[] = "valid_base64";
-		$validation[] = "prep_for_form";
-		$validation[] = "prep_url";
-		$validation[] = "strip_image_tags";
-		$validation[] = "encode_php_tags";
-        $validation[] = "htmlspecialchars";
-		$validation[] = "md5";
-		*/
-
-        $validation = array();
-
-		$type = strtolower($type);
-		if(strpos($type,"char") !== false)
-		{
+		if($field !== 'id') {
+			if(strpos($type,"(") !== false) {
+				list($type,$size,$unsigned) =  preg_split("/[()]+/",$type); // In the event type contains a size, i.e. smallint(5), break apart to make usable
+				$unsigned = trim($unsigned);
+				//die("$type,$size,$unsigned");
+			}
+			/*
 			$validation[] = "trim";
 			$validation[] = "required";
 			$validation[] = "min_length[1]";
 			if($size)
 				$validation[] = "min_length[$size]";
-
-            if(strpos($field,"email") !== false)
-            {
-                $validation[] = "valid_email";
-            }
-            else if(strpos($field,"phone") !== false || strpos($field,"fax") !== false)
-            {
-                $validation[] = "valid_phone";
-            }
-
 			$validation[] = "xss_clean";
-		}
-        else if(strpos($type,"text") !== false || strpos($type,"blob") !== false)
-		{
-			$validation[] = "trim";
-			$validation[] = "required";
-			$validation[] = "min_length[1]";
-			$validation[] = "xss_clean";
-		}
-        else if(strpos($type,"date") !== false || strpos($type,"time") !== false)
-		{
-			$validation[] = "trim";
-			$validation[] = "required";
-			$validation[] = "min_length[1]";
-			$validation[] = "xss_clean";
-		}
-		else if(strpos($type,"int") !== false)
-        {
-			$validation[] = "trim";
-			$validation[] = "required";
-            $validation[] = "integer";
-            /*
-			if(!$unsigned) {
-				$validation[] = "greater_than[".(-1*floor((pow(256,$size))/2)+1)."]";
-				$validation[] = "less_than[".(floor((pow(256,$size))/2))."]";
-			}
-			else {
-				$validation[] = "greater_than[-1]";
-				$validation[] = "less_than[".floor((pow(256,$size))-1)."]";
-			}
-            */
-		}
-        else if($type == 'float' || $type == 'decimal' || $type == 'double' || $type == 'real')
-        {
-			$validation[] = "trim";
-			$validation[] = "required";
-            $validation[] = "decimal";
-            $size = explode(",",$size);
-            $size = $size[0];
-            /*
-			if(!$unsigned) {
-				$validation[] = "greater_than[".(-1*floor((pow(256,$size))/2)+1)."]";
-				$validation[] = "less_than[".(floor((pow(256,$size))/2))."]";
-			}
-			else {
-				$validation[] = "greater_than[-1]";
-				$validation[] = "less_than[".floor((pow(256,$size))-1)."]";
-			}
-            */
-		}
+			$validation[] = "regex_match[/^$/]";
+			$validation[] = "matches[other_field_name]";
+			$validation[] = "exact_length[size]";
+			$validation[] = "greater_than[min]";
+			$validation[] = "less_than[max]";
+			$validation[] = "alpha";
+			$validation[] = "alpha_numeric";
+			$validation[] = "alpha_dash";
+			$validation[] = "numeric";
+			$validation[] = "is_numeric";
+			$validation[] = "integer";
+			$validation[] = "decimal";
+			$validation[] = "is_natural";
+			$validation[] = "is_natural_no_zero";
+			$validation[] = "valid_phone";
+			$validation[] = "valid_email";
+			$validation[] = "valid_emails";
+			$validation[] = "valid_ip";
+			$validation[] = "valid_base64";
+			$validation[] = "prep_for_form";
+			$validation[] = "prep_url";
+			$validation[] = "strip_image_tags";
+			$validation[] = "encode_php_tags";
+			$validation[] = "htmlspecialchars";
+			$validation[] = "md5";
+			*/
 
-		$column['Validation'] = implode("|",$validation);
-    		
+			$validation = array();
+
+			$type = strtolower($type);
+			if(strpos($type,"char") !== false)
+			{
+				$validation[] = "trim";
+				$validation[] = "required";
+				$validation[] = "min_length[1]";
+				if($size)
+					$validation[] = "min_length[$size]";
+
+				if(strpos($field,"email") !== false)
+				{
+					$validation[] = "valid_email";
+				}
+				else if(strpos($field,"phone") !== false || strpos($field,"fax") !== false)
+				{
+					$validation[] = "valid_phone";
+				}
+
+				$validation[] = "xss_clean";
+			}
+			else if(strpos($type,"text") !== false || strpos($type,"blob") !== false)
+			{
+				$validation[] = "trim";
+				$validation[] = "required";
+				$validation[] = "min_length[1]";
+				$validation[] = "xss_clean";
+			}
+			else if(strpos($type,"date") !== false || strpos($type,"time") !== false)
+			{
+				$validation[] = "trim";
+				$validation[] = "required";
+				$validation[] = "min_length[1]";
+				$validation[] = "xss_clean";
+			}
+			else if(strpos($type,"int") !== false)
+			{
+				$validation[] = "trim";
+				$validation[] = "required";
+				$validation[] = "integer";
+				/*
+				if(!$unsigned) {
+					$validation[] = "greater_than[".(-1*floor((pow(256,$size))/2)+1)."]";
+					$validation[] = "less_than[".(floor((pow(256,$size))/2))."]";
+				}
+				else {
+					$validation[] = "greater_than[-1]";
+					$validation[] = "less_than[".floor((pow(256,$size))-1)."]";
+				}
+				*/
+			}
+			else if($type == 'float' || $type == 'decimal' || $type == 'double' || $type == 'real')
+			{
+				$validation[] = "trim";
+				$validation[] = "required";
+				$validation[] = "decimal";
+				$size = explode(",",$size);
+				$size = $size[0];
+				/*
+				if(!$unsigned) {
+					$validation[] = "greater_than[".(-1*floor((pow(256,$size))/2)+1)."]";
+					$validation[] = "less_than[".(floor((pow(256,$size))/2))."]";
+				}
+				else {
+					$validation[] = "greater_than[-1]";
+					$validation[] = "less_than[".floor((pow(256,$size))-1)."]";
+				}
+				*/
+			}
+
+			$column['Validation'] = implode("|",$validation);
+    	}
 		$data['fields'][$field] = $column;
 		$data['sql_select_list'][] = $field;
 		$data['sql_insert_list'][] = $field;
@@ -171,7 +171,7 @@ class $table[classname] extends $table[baseclass]
 foreach($table['fields'] as $field)
 {
 $class .= "
-		\$this->add_field('$field[Field]','$field[Type]','$field[Null]','$field[Key]','$field[Default]','$field[Extra]');";
+		\$this->fields->add_field('$field[Field]','$field[Type]','$field[Null]','$field[Key]','$field[Default]','$field[Extra]');";
 }
 $class .= "
 		\$this->_init();
@@ -206,7 +206,7 @@ class $table[final_classname] extends $table[classname] {
 foreach($table['fields'] as $field)
 {
 $class .= "
-		\$this->init_field('$field[Field]', '".($field['Field'] == 'id' ? 'Options' : ucwords(str_replace("_"," ",$field['Field'])))."', '$field[Validation]', ".($field == 'id' ? 'FORM_HIDDEN' : 'FORM_INPUT').", ''); // dbtype: $field[Type]";
+		\$this->fields->init_field('$field[Field]', '".($field['Field'] == 'id' ? 'Options' : ucwords(str_replace("_"," ",$field['Field'])))."', '$field[Validation]', ".($field['Field'] == 'id' ? 'FORM_HIDDEN' : 'FORM_INPUT').", ''); // dbtype: $field[Type]";
 }
 $class .= "		
 	}

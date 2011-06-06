@@ -80,8 +80,9 @@ class CI_DB_result {
             $object = new $class_name();
             foreach ($row as $key => $value)
             {
-                $object->$key = $value;
+                $object->fields->$key = $value;
             }
+	        $object->fields->_is_dirty = false;
 			$result_object[] = $object;
 		}
 

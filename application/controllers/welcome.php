@@ -29,12 +29,7 @@ class Welcome extends CI_Controller {
 	public function index()
 	{
 		$this->load->view('welcome_message');
-
-        $this->load->model('Site');
-        //print print_array($this->Site);
-        $s = new Site();
-
-        $s->printFields();
+		
 		/*
 		To cache ANY controller method for a length of time, which uses the pre-generated page vs generating it again use:
 		$this->output->cache($minutes);
