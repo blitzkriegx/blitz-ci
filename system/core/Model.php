@@ -1,4 +1,5 @@
-<?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if (!defined('BASEPATH'))
+	exit('No direct script access allowed');
 
 include(BASEPATH . "core/CI_Model.php");
 include(BASEPATH . "core/Field.php");
@@ -12,8 +13,7 @@ include(BASEPATH . "core/Field_List.php");
  * @category	Libraries
  * @author		Sean 'Blitz' Homer
  */
-class CI_Model extends CI_Model_Base
-{
+class CI_Model extends CI_Model_Base {
 	protected $_table = '';
 	public $fields = null;
 
@@ -22,16 +22,14 @@ class CI_Model extends CI_Model_Base
 	 *
 	 * @access public
 	 */
-	public function __construct($table = '')
-	{
+	public function __construct($table = '') {
 		parent::__construct();
 
 		$this->_table = $table;
 		$this->fields = new Field_List();
 	}
 
-	protected function _init()
-	{
+	protected function _init() {
 		// MUST BE OVERRIDDEN
 	}
 
@@ -44,8 +42,7 @@ class CI_Model extends CI_Model_Base
 	 * @param int $id
 	 * @return int
 	 */
-	public function select_entry($id = 0)
-	{
+	public function select_entry($id = 0) {
 		if ($id !== 0) {
 			$this->db->where('id', $id);
 			$query = $this->db->get($this->_table);
@@ -71,8 +68,7 @@ class CI_Model extends CI_Model_Base
 	 * @return array
 	 */
 	// @todo See about having a flag to have it fill models of this class vs db rows, at the cost of more overhead
-	function select_entries($select = '', $where = array(), $limit = 0, $offset = 0)
-	{
+	function select_entries($select = '', $where = array(), $limit = 0, $offset = 0) {
 		// Using compounding queries
 		// $this->db->select('(SELECT SUM(payments.amount) FROM payments WHERE payments.invoice_id=4') AS amount_paid', FALSE);
 		if ($select !== '')
@@ -88,8 +84,7 @@ class CI_Model extends CI_Model_Base
 		return $query->result(get_class($this));
 	}
 
-	function select_sum($field = '', $where = array(), $limit = 0, $offset = 0)
-	{
+	function select_sum($field = '', $where = array(), $limit = 0, $offset = 0) {
 		if ($field != '') {
 			$this->db->select_sum($field);
 			$query = $this->db->get($this->_table, $limit, $offset);
@@ -98,8 +93,7 @@ class CI_Model extends CI_Model_Base
 		return NULL;
 	}
 
-	function select_entries_in($field = '', $values = '', $limit = 0, $offset = 0)
-	{
+	function select_entries_in($field = '', $values = '', $limit = 0, $offset = 0) {
 		if ($field != '' && $values != '') {
 			$this->db->where_in($field, preg_split("/[\s]?,[\s]?/", $values));
 			$query = $this->db->get($this->_table, $limit, $offset);
@@ -108,8 +102,7 @@ class CI_Model extends CI_Model_Base
 		return NULL;
 	}
 
-	function select_entries_like($field = '', $values = '', $limit = 0, $offset = 0)
-	{
+	function select_entries_like($field = '', $values = '', $limit = 0, $offset = 0) {
 		if ($field != '' && $values != '') {
 			$this->db->like($field, str_replace("%", "", $values));
 			$query = $this->db->get($this->_table, $limit, $offset);
@@ -118,26 +111,34 @@ class CI_Model extends CI_Model_Base
 		return NULL;
 	}
 
-	function select_num_rows()
-	{
+	function select_num_rows() {
 		return $this->db->count_all($this->_table);
+	}
+
+	/*
+	 * LIST FUNCTIONS
+	 */
+	function list_entries($select = '', $where = array(), $limit = 0, $offset = 0) {
+		$list = $this->select_entries($select, $where, $limit, $offset);
+		$list_count = count($list);
+		if ($list_count) {
+			return $list;
+		}
+		return null;
 	}
 
 	/*
 	INSERT FUNCTIONS
 	*/
-	function insert_entry($use_post = true)
-	{
+	function insert_entry($use_post = true) {
 		if ($use_post) {
-			foreach ($this->fields->_columns as $field)
-			{
+			foreach ($this->fields->_columns as $field) {
 				$value = $this->input->post($field);
 				$this->fields->$field = $value;
 				$this->db->set($field, $value);
 			}
 		}
-		else
-		{
+		else {
 			foreach ($this->fields->_columns as $field)
 				$this->db->set($field, $this->fields->$field);
 		}
@@ -152,8 +153,7 @@ class CI_Model extends CI_Model_Base
 	/*
 	UPDATE FUNCTIONS
 	*/
-	function update_entry($use_post = true)
-	{
+	function update_entry($use_post = true) {
 		if ($this->fields->_is_dirty) {
 			//die("update_entry::is_dirty");
 			foreach ($this->fields->_columns as $field)
@@ -163,8 +163,7 @@ class CI_Model extends CI_Model_Base
 		}
 		else if ($use_post) {
 			//die("update_entry::use_post");
-			foreach ($this->fields->_columns as $field)
-			{
+			foreach ($this->fields->_columns as $field) {
 				$value = $this->input->post($field);
 				$this->fields->$field = $value;
 				$this->db->set($field, $value);
@@ -180,8 +179,7 @@ class CI_Model extends CI_Model_Base
 	/*
 	DELETE FUNCTIONS
 	*/
-	function delete_entry($id = 0)
-	{
+	function delete_entry($id = 0) {
 		if (!$id) {
 			$id = $this->_fields->id->value;
 		}

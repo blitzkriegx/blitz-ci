@@ -2,88 +2,60 @@
 
 class Database extends CI_Controller
 {
+	public function __construct()
+	{
+		parent::__construct();
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 *		 http://example.com/index.php/welcome
-	 *	- or -
-	 *		 http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
+		$method = $this->uri->segment(3,'_data_infrastructure');
+		$m = '_data_infrastructure';
+		$this->data->method = ucwords($method); // segment 3 (instead of 2) needed since Admin is a subfolder of the controllers
+		
+		$this->load->model($m, 'm');
+		
+		$this->data->id = $this->uri->segment(4, 1);
+	}
+
 	public function index()
 	{
-		$data = array('_method' => ucwords($this->uri->segment(3))); // segment 3 (instead of 2) needed since Admin is a subfolder of the controllers
-		//
-		// do stuff
-		//
-		$this->load->view('admin/database', $data);
+		$this->load->view('admin/database', $this->data);
 	}
 
 	public function insert()
 	{
-		$data = array('_method' => ucwords($this->uri->segment(3))); // segment 3 (instead of 2) needed since Admin is a subfolder of the controllers
-
-		$this->load->model('_data_infrastructure', '_di');
-		$data['di'] = $this->_di;
-
 		if ($this->input->post('submit')) {
-			if($this->_di->insert_entry()) {
+			if($this->m->insert_entry()) {
 				$this->listing();
 			}
 		}
 
-		$this->load->view('admin/database', $data);
+		$this->load->view('admin/database', $this->data);
 	}
 
 	public function update()
 	{
-		$data = array('_method' => ucwords($this->uri->segment(3))); // segment 3 (instead of 2) needed since Admin is a subfolder of the controllers
-
-		$this->load->model('_data_infrastructure', '_di');
-
-		$row = $this->uri->segment(4, 1);
-
-		if($row) {
-			$di = $this->_di->select_entry($row);
+		if($this->data->row) {
+			$this->data->m = $this->m->select_entry($this->data->row);
 			if ($this->input->post('submit')) {
-				if($di->update_entry()) {
+				if($this->data->m->update_entry()) {
 					$this->listing();
 				}
 				else
 					die("Woot, not dirty");
 			}
-			$data['di'] = $di;
 			//die(print_array($data['di']));
 		}
-		$this->load->view('admin/database', $data);
+		$this->load->view('admin/database', $this->data);
 	}
 	
 	public function listing()
 	{
-		$data = array('_method' => ucwords($this->uri->segment(3))); // segment 3 (instead of 2) needed since Admin is a subfolder of the controllers
+		/*$entries = $e = array();
+		$e = $this->m->select_entries('',array(),10);
+		foreach($e as $entry)
+			$entries[$entry->fields->prefix][$entry->fields->table][] = $entry;
+		$this->data->entries = $entries;*/
 
-		$this->load->model('_data_infrastructure', 'di');
-		$data['di'] = $this->di;
-
-		$row = $this->uri->segment(4, 1);
-
-		if($row) {
-			$entries = $e = array();
-			$e = $this->di->select_entries();
-			foreach($e as $entry)
-				$entries[$entry->fields->prefix][$entry->fields->table][] = $entry;
-			$data['entries'] = $entries;
-		}
-
-		$this->load->view('admin/database', $data);
+		$this->load->view('admin/database', $this->data);
 	}
 
 	public function gen()

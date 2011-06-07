@@ -1,4 +1,5 @@
-<?  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?  if (!defined('BASEPATH'))
+	exit('No direct script access allowed');
 
 /**
  * Custom Field_List Class
@@ -9,20 +10,17 @@
  * @author		Sean 'Blitz' Homer
  */
 
-class Field_List
-{
+class Field_List {
 	protected $_fields = array();
 	public $_columns = array();
 	public $_is_dirty = false;
 	public $_validation = null;
 
-	public function __construct()
-	{
+	public function __construct() {
 		$this->_validation = new CI_Form_validation();
 	}
 
-	public function __set($field, $value)
-	{
+	public function __set($field, $value) {
 		if (in_array($field, $this->_columns)) {
 			$this->_fields[$field]->value = $value;
 			$this->_is_dirty = true;
@@ -30,27 +28,24 @@ class Field_List
 		}
 	}
 
-	public function __get($field)
-	{
+	public function __get($field) {
 		if (in_array($field, $this->_columns)) {
 			return $this->_fields[$field]->value;
 		}
 	}
 
-	public function __isset($field)
-	{
+	public function __isset($field) {
 		return isset($this->_fields[$field]);
 	}
 
-	public function __unset($field)
-	{
+	public function __unset($field) {
 		unset($this->_fields[$field]);
 	}
 
 	public function __toString() {
 		$str = '';
 		foreach ($this->_columns as $field) {
-			$str .= "<p><b>$field = </b>".$this->_fields[$field]->value."</p>";
+			$str .= "<p><b>$field = </b>" . $this->_fields[$field]->value . "</p>";
 		}
 		return $str;
 	}
@@ -64,21 +59,13 @@ class Field_List
 	 * @param  $extras
 	 * @return void
 	 */
-	function add_field($field, $type, $null, $key_type, $default, $extras)
-	{
+	function add_field($field, $type, $null, $key_type, $default, $extras) {
 		list($type, $size) = preg_split("/[()]/", $type); // In the event type contains a size, i.e. smallint(5), break apart to make usable
-		$this->_fields[$field] = new Field(array(
-		                                     'name' => $field,
-		                                     'type' => $type,
-		                                     'size' => $size,
-		                                     'null' => $null == 'NO' ? false : true,
-		                                     'primary_key' => $key_type == 'PRI' ? true : false,
-		                                     'unique' => $key_type == 'PRI' || $key_type == 'UNI' ? true
-				                                     : false,
-		                                     'default' => $default == '' || $default == 'NULL' ? NULL
-				                                     : $default,
-		                                     'auto_increment' => $extras == 'auto_increment' ? true : false
-		                                ));
+		$this->_fields[$field] = new Field(array('name' => $field, 'type' => $type, 'size' => $size, 'null' => $null == 'NO'
+					? false : true, 'primary_key' => $key_type == 'PRI' ? true
+					: false, 'unique' => $key_type == 'PRI' || $key_type == 'UNI' ? true
+					: false, 'default' => $default == '' || $default == 'NULL' ? NULL
+					: $default, 'auto_increment' => $extras == 'auto_increment' ? true : false));
 		$this->_columns[] = $field;
 	}
 
@@ -90,8 +77,7 @@ class Field_List
 	 * @param string $attrs
 	 * @return void
 	 */
-	function init_field($field, $input_label, $validation, $input_type, $attrs = '')
-	{
+	function init_field($field, $input_label, $validation, $input_type, $attrs = '') {
 		if ($this->_fields[$field] && get_class($this->_fields[$field]) == 'Field') {
 			$this->_fields[$field]->init($input_label, $input_type, $attrs);
 			$this->_validation->set_rules($field, $input_label, $validation); // $this->_table,
@@ -99,8 +85,7 @@ class Field_List
 		}
 	}
 
-	public function print_fields()
-	{
+	public function print_fields() {
 		$str = '';
 		foreach ($this->_columns as $field) {
 			$str .= $this->_fields[$field]->render();
@@ -108,18 +93,15 @@ class Field_List
 		print $str;
 	}
 
-	function has_parent()
-	{
+	function has_parent() {
 		return in_array('parent', $this->_columns);
 	}
 
-	function has_order_by()
-	{
+	function has_order_by() {
 		return in_array('order', $this->_columns);
 	}
 
-	function is_valid()
-	{
+	function is_valid() {
 		return $this->_validation->run();
 	}
 
