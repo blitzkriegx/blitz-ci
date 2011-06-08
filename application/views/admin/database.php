@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Welcome to CodeIgniter</title>
+	<title>BlitzCi Manager</title>
 	<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH ?>global.css"/>
 	<link rel="stylesheet" type="text/css" href="<?php echo JQUI_PATH ?>css/jquery-ui-1.8.13.min.css"/>
 	<script type="text/javascript" src="http://www.google.com/jsapi"></script>

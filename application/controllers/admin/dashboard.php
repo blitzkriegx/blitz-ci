@@ -19,8 +19,7 @@ class Dashboard extends CI_Controller {
 	 */
 	public function index()
 	{
-		print "Admin :: Dashboard";
-		$this->load->view('welcome_message');
+		$this->load->view('admin/master');
 	}
 }
 

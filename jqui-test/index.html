@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>BlitzCi Manager</title>
+	<link rel="stylesheet" type="text/css" href="web/css/global.css"/>
+	<link rel="stylesheet" type="text/css" href="web/js/jquery/ui/css/jquery.ui.all.min.css"/>
+	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+	<script type="text/javascript" src="web/js/_init.min.js"></script>
+
+	<script type="text/javascript" src="web/js/jquery/ui/jquery.ui.min.js"></script>
+</head>
+<body>
+<script>
+	$(function() {
+		debug("document::loaded");
+		$("#menu1").button({
+			icons: {
+				primary: "ui-icon-folder-collapsed",
+				secondary: "ui-icon-carat-1-s"
+			}
+		}).next().menu({
+					select: function(event, ui) {
+						$(this).hide();
+						debug("menu::select = " + ui.item.text());//attr('data-url')
+					}
+				}).popup();
+		$("#menu2").button({
+			icons: {
+				primary: "ui-icon-wrench",
+				secondary: "ui-icon-carat-1-s"
+			}
+		}).next().menu({
+					select: function(event, ui) {
+						$(this).hide();
+						debug("menu::select = " + ui.item.text());//attr('data-url')
+					}
+				}).popup();
+		$("#menu3").button({
+			icons: {
+				primary: "ui-icon-comment",
+				secondary: "ui-icon-circle-triangle-s"
+			}
+		}).next().menu({
+					select: function(event, ui) {
+						$(this).hide();
+						debug("menu::select = " + ui.item.text());//attr('data-url')
+					}
+				}).popup();
+		$("#menu4").button({
+			icons: {
+				primary: "ui-icon-gear"
+			}
+		});
+
+
+		/*$(".submenu").menu({
+		 select: function(event, ui) {
+		 $(this).hide();
+		 debug("submenu::select = " + ui.item.text());//attr('data-url')
+		 }
+		 })*/
+	});
+</script>
+
+<script>
+	$(function() {
+		$('.sites').button({
+			disabled: true,
+			icons: {
+				primary: 'ui-icon-home'
+			}
+		});
+		$("#sites").buttonset();
+		/*if ($.browser.webkit)
+		 $("#sites").css({'margin-top':'-35px'});*/
+	});
+</script>
+
+<style>
+	.ui-menu {
+		position: absolute;
+		width: 200px;
+		z-index: 9;
+	}
+
+	#toolbar {
+		padding: 10px 4px;
+	}
+
+	#menubar {
+		padding: 2px 5px;
+	}
+
+	#sites {
+		float: right;
+	}
+</style>
+
+<div id="menubar" class="ui-widget-header ui-corner-top">
+	<button id="menu1" class="menubar-menu">Menu 1</button>
+	<ul>
+		<li><a href="#1" data-url="admin/database/insert">Insert</a>
+			<ul class="submenu">
+				<li><a href="#1" data-url="admin/database/insert">Insert</a></li>
+				<li><a href="#2" data-url="admin/database/update">Update</a></li>
+				<li><a href="#3" data-url="admin/database/delete">Delete</a>
+					<ul class="submenu">
+						<li><a href="#1" data-url="admin/database/insert">Insert</a></li>
+						<li><a href="#2" data-url="admin/database/update">Update</a></li>
+						<li><a href="#3" data-url="admin/database/delete">Delete</a></li>
+						<li><a href="#">
+							<hr/>
+						</a></li>
+						<li><a href="#4" data-url="admin/database/listing">Listing</a></li>
+					</ul>
+				</li>
+				<li><a href="#">
+					<hr/>
+				</a></li>
+				<li><a href="#4" data-url="admin/database/listing">Listing</a></li>
+			</ul>
+		</li>
+		<li><a href="#2" data-url="admin/database/update">Update</a></li>
+		<li><a href="#3" data-url="admin/database/delete">Delete</a>
+			<ul class="submenu">
+				<li><a href="#1" data-url="admin/database/insert">Insert</a></li>
+				<li><a href="#2" data-url="admin/database/update">Update</a></li>
+				<li><a href="#3" data-url="admin/database/delete">Delete</a></li>
+				<li><a href="#">
+					<hr/>
+				</a></li>
+				<li><a href="#4" data-url="admin/database/listing">Listing</a></li>
+			</ul>
+		</li>
+		<li><a href="#">
+			<hr/>
+		</a></li>
+		<li><a href="#4" data-url="admin/database/listing">Listing</a></li>
+	</ul>
+
+	<button id="menu2" class="menubar-menu">Menu 2</button>
+	<ul>
+		<li><a href="#1" data-url="admin/database/insert">Insert</a></li>
+		<li><a href="#2" data-url="admin/database/update">Update</a>
+			<ul class="submenu">
+				<li><a href="#1" data-url="admin/database/insert">Insert</a></li>
+				<li><a href="#2" data-url="admin/database/update">Update</a></li>
+				<li><a href="#3" data-url="admin/database/delete">Delete</a></li>
+				<li><a href="#">
+					<hr/>
+				</a></li>
+				<li><a href="#4" data-url="admin/database/listing">Listing</a></li>
+			</ul>
+		</li>
+		<li><a href="#3" data-url="admin/database/delete">Delete</a></li>
+		<li><a href="#">
+			<hr/>
+		</a></li>
+		<li><a href="#4" data-url="admin/database/listing">Listing</a></li>
+	</ul>
+
+
+	<button id="menu3" class="menubar-menu">Menu 3</button>
+	<ul>
+		<li><a href="#1" data-url="admin/database/insert">Insert</a></li>
+		<li><a href="#2" data-url="admin/database/update">Update</a></li>
+		<li><a href="#3" data-url="admin/database/delete">Delete</a></li>
+		<li><a href="#">
+			<hr/>
+		</a></li>
+		<li><a href="#4" data-url="admin/database/listing">Listing</a>
+			<ul class="submenu">
+				<li><a href="#1" data-url="admin/database/insert">Insert</a></li>
+				<li><a href="#2" data-url="admin/database/update">Update</a></li>
+				<li><a href="#3" data-url="admin/database/delete">Delete</a>
+					<ul class="submenu">
+						<li><a href="#1" data-url="admin/database/insert">Insert</a></li>
+						<li><a href="#2" data-url="admin/database/update">Update</a></li>
+						<li><a href="#3" data-url="admin/database/delete">Delete</a></li>
+						<li><a href="#">
+							<hr/>
+						</a></li>
+						<li><a href="#4" data-url="admin/database/listing">Listing</a></li>
+					</ul>
+				</li>
+				<li><a href="#">
+					<hr/>
+				</a></li>
+				<li><a href="#4" data-url="admin/database/listing">Listing</a></li>
+			</ul>
+		</li>
+	</ul>
+
+	<button id="menu4" class="menubar-menu">Menu 4</button>
+
+	<div id="sites">
+		<button class="sites">Site:</button>
+		<input type="radio" id="site1" name="repeat" checked="checked"/><label for="site1">Main</label>
+		<input type="radio" id="site2" name="repeat"/><label for="site2">Res.</label>
+		<input type="radio" id="site3" name="repeat"/><label for="site3">Biz.</label>
+	</div>
+</div>
+<div class="ui-widget-content ui-corner-bottom" style="height: 500px;">
+
+</div>
+</body>
+</html>
