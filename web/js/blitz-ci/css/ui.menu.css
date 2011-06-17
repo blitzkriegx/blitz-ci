@@ -1,0 +1,22 @@
+.ui-menu {
+	position: absolute;
+	width: 200px;
+	z-index: 9;
+}
+
+#toolbar {
+	padding: 10px 4px;
+}
+
+#menu {
+	padding: 2px 40px;
+}
+
+#sites, #switcher {
+	float: right;
+}
+
+#switcher {
+	margin-top: 10px;
+	margin-left: 10px;
+}
