@@ -17,6 +17,7 @@ class Field_List {
 	public $_validation = null;
 
 	public function __construct() {
+		// @todo: temporary work around to allow validation to separate to each model, yet it creates new instances, need to be revised
 		$this->_validation = new CI_Form_validation();
 	}
 

@@ -12,15 +12,20 @@ include(BASEPATH . "core/Field_List.php");
  * @subpackage	Libraries
  * @category	Libraries
  * @author		Sean 'Blitz' Homer
+ *
+ * As a base class, this is never used directly, and therefore has been made abstract to accommodate certain
+ * functionality which must be overwritten
  */
-class CI_Model extends CI_Model_Base {
+
+
+ class CI_Model extends CI_Model_Base {
 	protected $_table = '';
 	public $fields = null;
 
 	/**
 	 * Constructor
 	 *
-	 * @access public
+	 * @param string $table
 	 */
 	public function __construct($table = '') {
 		parent::__construct();
@@ -29,9 +34,30 @@ class CI_Model extends CI_Model_Base {
 		$this->fields = new Field_List();
 	}
 
-	protected function _init() {
-		// MUST BE OVERRIDDEN
-	}
+	/**
+	 * _init
+	 *
+	 * MUST BE OVERWRITTEN
+	 *
+	 * This function is expected to be ran in the child 'tbl_' classes,
+	 * while the function itself is defined within the grandchild class, the direct models
+	 * which are used and interacted with through the controllers.
+	 *
+	 * The model construct when ran on the child 'tbl_' class only initialize the basic
+	 * database definitions, how the fields for the class will be used in db interactions,
+	 * whereas the grandchild classes have additional specifications such as input label,
+	 * validation methods to be applied, etc.
+	 *
+	 * The reason for having this flexibility, is to allow the child 'tbl_' classes to be
+	 * recreated and overwritten at will with small db changes, while the grandchild classes
+	 * once set up will be filled with custom methods and attributes, and not be overwritten.
+	 * By simply forcing the child 'tbl_' class to call into the grandchild class, it creates
+	 * that flexibility.
+	 *
+	 * @abstract
+	 * @return void
+	 */
+	protected function _init(){}
 
 	/**
 	 * Select Entry
@@ -67,7 +93,6 @@ class CI_Model extends CI_Model_Base {
 	 * @param int $offset
 	 * @return array
 	 */
-	// @todo See about having a flag to have it fill models of this class vs db rows, at the cost of more overhead
 	function select_entries($select = '', $where = array(), $limit = 0, $offset = 0) {
 		// Using compounding queries
 		// $this->db->select('(SELECT SUM(payments.amount) FROM payments WHERE payments.invoice_id=4') AS amount_paid', FALSE);
@@ -84,6 +109,17 @@ class CI_Model extends CI_Model_Base {
 		return $query->result(get_class($this));
 	}
 
+	/**
+	 * Select Sum
+	 *
+	 * Allows you to determine the total sum of a specific field within a table
+	 *
+	 * @param string $field
+	 * @param array $where
+	 * @param int $limit
+	 * @param int $offset
+	 * @return int
+	 */
 	function select_sum($field = '', $where = array(), $limit = 0, $offset = 0) {
 		if ($field != '') {
 			$this->db->select_sum($field);
@@ -115,8 +151,12 @@ class CI_Model extends CI_Model_Base {
 		return $this->db->count_all($this->_table);
 	}
 
-	/*
-	 * LIST FUNCTIONS
+	/**
+	 * @param string $select
+	 * @param array $where
+	 * @param int $limit
+	 * @param int $offset
+	 * @return array|null
 	 */
 	function list_entries($select = '', $where = array(), $limit = 0, $offset = 0) {
 		$list = $this->select_entries($select, $where, $limit, $offset);
@@ -127,9 +167,10 @@ class CI_Model extends CI_Model_Base {
 		return null;
 	}
 
-	/*
-	INSERT FUNCTIONS
-	*/
+	/**
+	 * @param bool $use_post
+	 * @return int
+	 */
 	function insert_entry($use_post = true) {
 		if ($use_post) {
 			foreach ($this->fields->_columns as $field) {
@@ -150,9 +191,10 @@ class CI_Model extends CI_Model_Base {
 		return $this->fields->id;
 	}
 
-	/*
-	UPDATE FUNCTIONS
-	*/
+	/**
+	 * @param bool $use_post
+	 * @return bool|null
+	 */
 	function update_entry($use_post = true) {
 		if ($this->fields->_is_dirty) {
 			//die("update_entry::is_dirty");
@@ -176,9 +218,10 @@ class CI_Model extends CI_Model_Base {
 		return NULL;
 	}
 
-	/*
-	DELETE FUNCTIONS
-	*/
+	/**
+	 * @param int $id
+	 * @return bool
+	 */
 	function delete_entry($id = 0) {
 		if (!$id) {
 			$id = $this->_fields->id->value;
